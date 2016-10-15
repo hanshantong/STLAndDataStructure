@@ -6,6 +6,12 @@ Bag::Bag()
 	m_data = new value_type[CAPACITY];
 }
 
+Bag::Bag(size_type size=Bag::CAPACITY)
+{
+	CAPACITY = size;
+	m_used = 0;
+	m_data = new value_type[size];
+}
 
 Bag::size_type Bag::size() const
 {

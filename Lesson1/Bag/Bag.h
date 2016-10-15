@@ -15,6 +15,7 @@ public:
 
 public:
 	Bag();
+	Bag(size_type size);
 	size_type size() const;
 	void insert(const value_type& entry);
 	size_type count(const value_type& target) const;
