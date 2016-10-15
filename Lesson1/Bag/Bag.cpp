@@ -1,17 +1,17 @@
 #include "Bag.h"
-Bag::size_type Bag::CAPACITY = 100;
 Bag::Bag()
 {
 	m_used = 0;
-	m_data = new value_type[CAPACITY];
+	m_capacity = 100;
+	m_data = new value_type[m_capacity];
 }
 
 Bag::Bag(size_type size)
 {
-	if (CAPACITY < size)
-		CAPACITY = size;
+	if (m_capacity < size)
+		m_capacity = size;
 	m_used = 0;
-	m_data = new value_type[CAPACITY];
+	m_data = new value_type[m_capacity];
 }
 
 Bag::Bag(const Bag& b)
@@ -21,8 +21,8 @@ Bag::Bag(const Bag& b)
 		delete[] m_data;
 
 	size_type b_len = b.size();
-	if (CAPACITY > b_len)
-		m_data = new value_type[CAPACITY];
+	if (m_capacity > b_len)
+		m_data = new value_type[m_capacity];
 	else
 		m_data = new value_type[b_len + 30];
 
@@ -102,10 +102,10 @@ void Bag::operator += (const Bag& b)
 	if (this == &b) //防止bag += bag
 		return;
 	size_type b_len = b.size();
-	if (m_used + b_len > CAPACITY)
+	if (m_used + b_len > m_capacity)
 	{
-		CAPACITY = m_used + b_len + 50;
-		value_type *temp = new value_type[CAPACITY];
+		m_capacity = m_used + b_len + 50;
+		value_type *temp = new value_type[m_capacity];
 		for (size_type i = 0; i < m_used; ++i)
 		{
 			temp[i] = m_data[i];
@@ -139,8 +139,8 @@ void Bag::operator = (const Bag& b)
 	if (m_data != NULL)
 		delete[] m_data;
 	size_type b_len = b.size();
-	if (b_len < CAPACITY)
-		m_data = new value_type[CAPACITY];
+	if (b_len < m_capacity)
+		m_data = new value_type[m_capacity];
 	else
 		m_data = new value_type[b_len + 30];
 

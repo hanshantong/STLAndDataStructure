@@ -11,7 +11,7 @@ class Bag
 public:
 	typedef int value_type;
 	typedef std::size_t size_type;
-	static  size_type CAPACITY;
+	
 
 public:
 	Bag();
@@ -42,7 +42,7 @@ public:
 private:
 	value_type *m_data;
 	size_type m_used;
-
+	size_type m_capacity;
 
 
 
