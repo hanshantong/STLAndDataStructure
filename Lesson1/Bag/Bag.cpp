@@ -6,11 +6,28 @@ Bag::Bag()
 	m_data = new value_type[CAPACITY];
 }
 
-Bag::Bag(size_type size=Bag::CAPACITY)
+Bag::Bag(size_type size)
 {
-	CAPACITY = size;
+	if (CAPACITY < size)
+		CAPACITY = size;
 	m_used = 0;
-	m_data = new value_type[size];
+	m_data = new value_type[CAPACITY];
+}
+
+Bag::Bag(const Bag& b)
+{
+	this->m_used = b.size();
+	if (NULL != m_data)
+		delete[] m_data;
+
+	size_type b_len = b.size();
+	if (CAPACITY > b_len)
+		m_data = new value_type[CAPACITY];
+	else
+		m_data = new value_type[b_len + 30];
+
+	for (size_type i = 0; i < b_len; ++i)
+		m_data[i] = b.getItem(i);
 }
 
 Bag::size_type Bag::size() const
@@ -107,39 +124,26 @@ Bag operator + (const Bag& b1, const Bag& b2)
 	Bag bag;
 	bag += b1;
 	bag += b2;
-
 	return bag;
-	/*Bag::size_type b1_len = b1.size();
-	Bag::size_type b2_len = b2.size();
+}
 
-	if (Bag::CAPACITY < b1_len + b2_len)
-	{
-	Bag::CAPACITY = b1_len + b2_len + 50;
-	Bag::value_type *tmp = new Bag::value_type[Bag::CAPACITY];
+void Bag::operator = (const Bag& b)
+{
+	if (m_data != NULL)
+		delete[] m_data;
+	size_type b_len = b.size();
+	if (b_len < CAPACITY)
+		m_data = new value_type[CAPACITY];
+	else
+		m_data = new value_type[b_len + 30];
 
-	for (Bag::size_type i = 0; i < b1_len; ++i)
-	{
-	tmp[i] = b1.m_data[i];
-	}
+	for (size_type i = 0; i < b_len; ++i)
+		m_data[i] = b.getItem(i);
+	m_used = b.size();
+}
 
-	for (Bag::size_type i = 0; i < b2_len; ++i)
-	{
-	tmp[i] = b1.m_data[i];
-	}
-
-	bag.m_used = b1_len + b2_len;
-	delete[] bag.m_data;
-	bag.m_data = tmp;
-	return bag;
-	}
-
-	for (Bag::size_type i = 0; i < b1_len; ++i)
-	{
-	bag.m_data[bag.m_used++] = b1.m_data[i];
-	}
-
-	for (Bag::size_type i = 0; i < b2_len; ++i)
-	{
-	bag.m_data[bag.m_used++] = b1.m_data[i];
-	}*/
+Bag::value_type Bag::getItem(size_type i)const
+{
+	assert(i >= 0 && i < m_used);
+	return m_data[i];
 }

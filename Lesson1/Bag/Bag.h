@@ -16,13 +16,17 @@ public:
 public:
 	Bag();
 	Bag(size_type size);
+	Bag(const Bag& b);
+
 	size_type size() const;
 	void insert(const value_type& entry);
 	size_type count(const value_type& target) const;
 	bool erase_one(const value_type& target);
 	size_type erase(const value_type& target);
 	void operator += (const Bag& b);
+	void operator = (const Bag& b);
 
+	value_type getItem(size_type i)const;
 	void print()
 	{
 		size_type i = 0;
@@ -38,7 +42,7 @@ public:
 private:
 	value_type *m_data;
 	size_type m_used;
-	size_type m_index;
+
 
 
 
