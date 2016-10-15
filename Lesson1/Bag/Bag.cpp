@@ -136,14 +136,19 @@ Bag operator + (const Bag& b1, const Bag& b2)
 
 void Bag::operator = (const Bag& b)
 {
-	if (m_data != NULL)
-		delete[] m_data;
-	size_type b_len = b.size();
-	if (b_len < m_capacity)
-		m_data = new value_type[m_capacity];
-	else
-		m_data = new value_type[b_len + 30];
+		if (this == &b)  //avoid self-assignment
+		return;
+	value_type *new_data;
 
+	size_type b_len = b.size();
+	if (b_len != m_capacity)
+	{
+		new_data = new value_type[b_len+30];
+		if (m_data != NULL)
+			delete[] m_data;
+		m_data = new_data;
+		m_capacity = b_len + 30;
+	}	
 	for (size_type i = 0; i < b_len; ++i)
 		m_data[i] = b.getItem(i);
 	m_used = b.size();
