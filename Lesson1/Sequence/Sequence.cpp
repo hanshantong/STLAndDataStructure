@@ -4,6 +4,7 @@ Sequence::Sequence()
 {
 	m_used = 0;
 	m_data = new value_type[CAPACITY];
+	m_index = 0;
 }
 
 
@@ -14,7 +15,30 @@ Sequence::size_type Sequence::size() const
 
 void Sequence::insert(const value_type& entry)
 {
-	m_data[m_used++] = entry;
+	if (-1 == m_index)return;
+	size_type i = m_used;
+	while (i > 0 && i > m_index)
+	{
+		m_data[i] = m_data[i - 1];
+		i--;
+	}
+	m_data[i] = entry;
+	m_index = i;
+	m_used++;
+}
+
+void Sequence::attach(const value_type& entry)
+{
+	if (-1 == m_index)return;
+	size_type i = m_used;
+	while (i > 0 && i > m_index + 1)
+	{
+		m_data[i] = m_data[i - 1];
+		i--;
+	}
+	m_data[i] = entry;
+	m_index = i;
+	m_used++;
 }
 
 Sequence::size_type Sequence::count(const value_type& target) const
@@ -46,20 +70,24 @@ bool Sequence::erase_one(const value_type& target)
 	return false;
 }
 
+//clear all target elements
 Sequence::size_type Sequence::erase(const value_type& target)
 {
 	size_type i = 0;
 	size_type cnt = 0;
+	size_type number = 0;
 	while (i < m_used)
 	{
 		if (target == m_data[i])
 		{
 			size_type j = i;
-			while (j < m_used - 1)
+			while (j < m_used )
 			{
-				m_data[j] = m_data[++j];
+				m_data[j] = m_data[j+1];
+				j++;
 			}
 			m_used--;
+			i--;
 			cnt++;
 		}
 		i++;
@@ -137,3 +165,44 @@ Sequence operator + (const Sequence& b1, const Sequence& b2)
 	sequence.m_data[sequence.m_used++] = b1.m_data[i];
 	}*/
 }
+
+
+void Sequence::start()
+{
+	m_index = 0;
+}
+
+Sequence::value_type Sequence::current() const
+{
+	assert(m_index >= 0 && m_index < m_used);
+	return m_data[m_index];
+}
+
+void Sequence::advance()
+{
+	assert(m_index >= 0 && m_index < m_used);
+	m_index++;
+}
+
+bool Sequence::isItem()
+{
+	return (m_index >= 0 && m_index < m_used) ? true : false;
+}
+
+void Sequence::remove_current()
+{
+	size_type i = m_index;
+	while (i < m_used)
+	{
+		m_data[i] = m_data[i + 1];
+		i++;
+	}
+	m_used--;
+}
+
+Sequence::value_type Sequence::getCurrentItem()const
+{
+	assert(m_index >= 0 && m_index < m_used);
+	return m_data[m_index];
+}
+
