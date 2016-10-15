@@ -30,6 +30,13 @@ Bag::Bag(const Bag& b)
 		m_data[i] = b.getItem(i);
 }
 
+ Bag::~Bag()
+{
+	if (NULL != m_data)
+		delete [] m_data;
+}
+
+
 Bag::size_type Bag::size() const
 {
 	return m_used;
